@@ -8,10 +8,11 @@ public class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private Animator anim;
-    PlayerInput pInput;
-    public float speed, jumpforce, boost, climbValue, timeScore,finalScore;
+    //PlayerInput pInput;
+    public float speed, jumpforce, boost, climbValue;
+    private float timeScore, finalScore;
     public bool isJumping;
-    private float time;
+    public Vector3 velocity;
     Vector2 m_move, m_rightstick;
     private InputAction m_jump, m_slide, m_colorChange;
     private Rigidbody rBody;
@@ -22,6 +23,8 @@ public class CharacterController : MonoBehaviour
     public TMP_Text timerText, scoreText;
     [SerializeField]
     Vector3 checkpoint, startPos;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,11 +37,11 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeScore -= Time.deltaTime;
-        time = Time.time;
-        timerText.text = "Timer: " + time.ToString();
+        timeScore += Time.deltaTime;
+        timerText.text = "Timer: " + timeScore.ToString();
         anim.SetFloat("IdleTimer", anim.GetFloat("IdleTimer") + Time.deltaTime);
         // Debug.Log(anim.GetFloat("IdleTimer"));
+        velocity = rBody.velocity;
         if (anim.GetFloat("IdleTimer") > 5)
         {
             anim.SetFloat("IdleTimer", 0);
@@ -49,9 +52,15 @@ public class CharacterController : MonoBehaviour
             transform.rotation = new Quaternion(0, 180, 0, transform.rotation.w);
         }
         else if (m_move.x == 1) transform.rotation = new Quaternion(0, 0, 0, transform.rotation.w);
-        transform.position += new Vector3(0, 0, m_move.x) * speed * Time.deltaTime * boost;
 
-        if (m_move.x == 0) anim.SetBool("IsRunning", false);
+        
+
+        if (m_move.x == 0)
+        {
+            anim.SetBool("IsRunning", false);
+            rBody.velocity = new Vector3(0, rBody.velocity.y, 0);
+        }
+        else rBody.velocity = new Vector3(0, rBody.velocity.y, m_move.x * speed) ;
         //rBody.AddForce(new Vector3(0, -8.1f, 0)); // gravitys
 
     }
@@ -76,22 +85,32 @@ public class CharacterController : MonoBehaviour
         isJumping = true;
 
         rBody.velocity = new Vector3(0, 0, 0);
-        rBody.AddForce(new Vector3(0, jumpforce, 0));
+        rBody.AddForce(new Vector3(0, jumpforce * speed, m_move.x));
         anim.SetTrigger("Jump");
 
     }
 
-    
+    public void OnSlide(InputAction action)
+
+    {
+
+
+
+        rBody.AddForce(new Vector3(0, 0, rBody.velocity.z * boost));
+        anim.SetBool("Slide", true);
+
+
+    }
     private void OnCollisionEnter(Collision collision)
     {
 
         if (collision.gameObject.layer == 11)
         {
-            if(m_rightstick == new Vector2(0,0))
-            checkpoint = transform.position;
-            
+            if (m_rightstick == new Vector2(0, 0))
+                checkpoint = transform.position;
+
         }
-       
+
         if (collision.gameObject.tag == "Wall")
         {
             if (isJumping == true)
@@ -111,17 +130,17 @@ public class CharacterController : MonoBehaviour
         {
             this.transform.position = checkpoint;
 
-          
+
         }
         if (other.gameObject.tag == "Flag")
         {
             if (finalScore == 0)
             {
-                finalScore = -timeScore * 24;
-                scoreText.text += "Final Score: " + finalScore.ToString();
+                finalScore = timeScore;
+                scoreText.text += "Your time: " + finalScore.ToString() + " seconds";
             }
         }
-        
+
     }
     public void OnLook(InputValue value)
     {
@@ -162,12 +181,12 @@ public class CharacterController : MonoBehaviour
         // west == purple
         // east == red
         // neutral == white
-        
+
     }
 
     public void OnReset(InputValue value)
     {
-        time = 0;
+
         finalScore = 0;
         timerText.text = "Timer: ";
         scoreText.text = " ";
