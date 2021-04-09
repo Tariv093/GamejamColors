@@ -8,13 +8,14 @@ public class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private Animator anim;
+    public CapsuleCollider hitbox;
     //PlayerInput pInput;
     public float speed, jumpforce, boost, climbValue;
-    private float timeScore, finalScore;
+    private float timerScore, finalScore;
     public bool isJumping;
     public Vector3 velocity;
     Vector2 m_move, m_rightstick;
-    private InputAction m_jump, m_slide, m_colorChange;
+    //private InputAction m_jump, m_slide, m_colorChange;
     private Rigidbody rBody;
     [SerializeField]
     private Renderer surfaceRenderer, jointRenderer;
@@ -29,6 +30,7 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
+        hitbox = GetComponent<CapsuleCollider>();
         startPos = transform.position;
         // mat = GetComponentInChildren<SkinnedMeshRenderer>().material;
 
@@ -37,8 +39,8 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeScore += Time.deltaTime;
-        timerText.text = "Timer: " + timeScore.ToString();
+        timerScore += Time.deltaTime;
+        timerText.text = "Timer: " + timerScore.ToString();
         anim.SetFloat("IdleTimer", anim.GetFloat("IdleTimer") + Time.deltaTime);
         // Debug.Log(anim.GetFloat("IdleTimer"));
         velocity = rBody.velocity;
@@ -53,16 +55,19 @@ public class CharacterController : MonoBehaviour
         }
         else if (m_move.x == 1) transform.rotation = new Quaternion(0, 0, 0, transform.rotation.w);
 
-        
-
         if (m_move.x == 0)
         {
             anim.SetBool("IsRunning", false);
             rBody.velocity = new Vector3(0, rBody.velocity.y, 0);
         }
-        else rBody.velocity = new Vector3(0, rBody.velocity.y, m_move.x * speed) ;
+        else rBody.velocity = new Vector3(0, rBody.velocity.y, m_move.x * speed * boost);
         //rBody.AddForce(new Vector3(0, -8.1f, 0)); // gravitys
 
+        if (boost > 1)
+        {
+            boost -= Time.deltaTime;
+        }
+        else if (boost < 1) boost = 1;
     }
     public void OnMove(InputValue value)
     {
@@ -70,11 +75,10 @@ public class CharacterController : MonoBehaviour
         m_move = value.Get<Vector2>();
         anim.SetFloat("Movement 0", m_move.x);
         anim.SetFloat("IdleTimer", 0);
-
     }
 
 
-    public void OnJump(InputValue value)
+    public void OnJump()
     {
 
         if (isJumping == true)
@@ -90,15 +94,28 @@ public class CharacterController : MonoBehaviour
 
     }
 
-    public void OnSlide(InputAction action)
-
+    public void OnSlide(InputValue value)
     {
 
+        float slideVar = value.Get<float>();
+        if (isJumping == false)
+        {
+            boost = 2;
+            if (value.isPressed)
+            {
+                anim.SetBool("Slide", true);
+                hitbox.center = new Vector3(0, 0.5f, 0) ;
+                hitbox.direction = 2;
+            }
+            else
+            {
+                anim.SetBool("Slide", false);
 
-
-        rBody.AddForce(new Vector3(0, 0, rBody.velocity.z * boost));
-        anim.SetBool("Slide", true);
-
+                hitbox.center = new Vector3(0, 0.95f, 0);
+                hitbox.direction = 1;
+            }
+        }
+       // anim.SetBool("Slide",false);
 
     }
     private void OnCollisionEnter(Collision collision)
@@ -116,7 +133,7 @@ public class CharacterController : MonoBehaviour
             if (isJumping == true)
             {
                 Debug.Log("wall run");
-                rBody.AddForce(new Vector3(0, climbValue, 0));
+                rBody.AddForce(new Vector3(0, climbValue * boost, 0));
                 anim.SetTrigger("WallClimb");
             }
         }
@@ -136,7 +153,7 @@ public class CharacterController : MonoBehaviour
         {
             if (finalScore == 0)
             {
-                finalScore = timeScore;
+                finalScore = timerScore;
                 scoreText.text += "Your time: " + finalScore.ToString() + " seconds";
             }
         }
@@ -188,6 +205,7 @@ public class CharacterController : MonoBehaviour
     {
 
         finalScore = 0;
+        timerScore = 0;
         timerText.text = "Timer: ";
         scoreText.text = " ";
         transform.position = startPos;

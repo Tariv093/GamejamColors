@@ -360,7 +360,7 @@ public class @GameJamCOLORS : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": ""Press,Press(behavior=1)"",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

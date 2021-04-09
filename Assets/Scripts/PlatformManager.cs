@@ -9,6 +9,8 @@ public class PlatformManager : MonoBehaviour
     public CharacterController player;
     [SerializeField]
     Material[] color;
+    private bool colorHardMode = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,35 +21,37 @@ public class PlatformManager : MonoBehaviour
         yellowObjects = GameObject.FindGameObjectsWithTag("Yellow");
 
 
+        if (colorHardMode == false)
+        {
+            foreach (GameObject platform in purpleObjects)
+            {
+                platform.layer = 10;
 
-        foreach (GameObject platform in purpleObjects)
-        {
-            platform.layer = 10;
-            
-            platform.GetComponent<MeshRenderer>().material = color[2];
+                platform.GetComponent<MeshRenderer>().material = color[2];
 
-        }
-        foreach (GameObject platform in orangeObjects)
-        {
-            platform.layer = 8;
-            platform.GetComponent<MeshRenderer>().material = color[1];
-        }
-        foreach (GameObject platform in blueObjects)
-        {
-            platform.layer = 9;
-            platform.GetComponent<MeshRenderer>().material = color[3];
-        }
-        foreach (GameObject platform in yellowObjects)
-        {
-            platform.layer = 12;
-            platform.GetComponent<MeshRenderer>().material = color[4];
+            }
+            foreach (GameObject platform in orangeObjects)
+            {
+                platform.layer = 8;
+                platform.GetComponent<MeshRenderer>().material = color[1];
+            }
+            foreach (GameObject platform in blueObjects)
+            {
+                platform.layer = 9;
+                platform.GetComponent<MeshRenderer>().material = color[3];
+            }
+            foreach (GameObject platform in yellowObjects)
+            {
+                platform.layer = 12;
+                platform.GetComponent<MeshRenderer>().material = color[4];
 
-        }
-        foreach (GameObject platform in whiteObjects)
-        {
-            platform.layer = 11;
-            platform.GetComponent<MeshRenderer>().material = color[0];
+            }
+            foreach (GameObject platform in whiteObjects)
+            {
+                platform.layer = 11;
+                platform.GetComponent<MeshRenderer>().material = color[0];
 
+            }
         }
     }
 
