@@ -829,6 +829,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &867974738 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8759185123074100616, guid: 8d97e781c938e064eaf7208e13bde008, type: 3}
+  m_PrefabInstance: {fileID: 8759185122925233859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &867974739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867974738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513b220d1c631874db219bff17e3ca95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadScene: Level2
 --- !u!1 &1109839896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,6 +1507,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1328088092, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: m_Constraints
+      value: 114
+      objectReference: {fileID: 0}
     - target: {fileID: 1328088094, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
       propertyPath: m_Height
       value: 1.8
@@ -1509,6 +1531,26 @@ PrefabInstance:
       propertyPath: timerText
       value: 
       objectReference: {fileID: 327174820}
+    - target: {fileID: 1328088096, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: particles
+      value: 
+      objectReference: {fileID: 4338562793500833366, guid: fe3e428001d0cb441baa6935e5433604, type: 3}
+    - target: {fileID: 1328088096, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: color.Array.data[1].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328088096, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: color.Array.data[2].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328088096, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: color.Array.data[3].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328088096, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
+      propertyPath: color.Array.data[4].a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6940224170173984911, guid: 33423d5880fdb60429017a8d3240d4d1, type: 3}
       propertyPath: m_Name
       value: Player

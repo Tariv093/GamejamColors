@@ -9,6 +9,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private Animator anim;
     public CapsuleCollider hitbox;
+    public GameObject particles;
     //PlayerInput pInput;
     public float speed, jumpforce, boost, climbValue;
     private float timerScore, finalScore;
@@ -33,7 +34,6 @@ public class CharacterController : MonoBehaviour
         hitbox = GetComponent<CapsuleCollider>();
         startPos = transform.position;
         // mat = GetComponentInChildren<SkinnedMeshRenderer>().material;
-
     }
 
     // Update is called once per frame
@@ -91,7 +91,6 @@ public class CharacterController : MonoBehaviour
         rBody.velocity = new Vector3(0, 0, 0);
         rBody.AddForce(new Vector3(0, jumpforce * speed, m_move.x));
         anim.SetTrigger("Jump");
-
     }
 
     public void OnSlide(InputValue value)
@@ -168,12 +167,27 @@ public class CharacterController : MonoBehaviour
             surfaceRenderer.material.color = color[1];
             gameObject.layer = 8;
             jointRenderer.material.color = color[1];
+            GameObject nP = Instantiate(particles, transform.position, Quaternion.identity) as GameObject;
+            ParticleSystem pSys = nP.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule ma = pSys.main;
+            ma.startColor = color[1];
+            
+            nP.transform.position = this.transform.position;
+        
+
         }
         else if (m_rightstick.y < -0.2f)
         {
             gameObject.layer = 10;
             surfaceRenderer.material.color = color[2];
             jointRenderer.material.color = color[2];
+            GameObject nP = Instantiate(particles, transform.position, Quaternion.identity) as GameObject;
+            ParticleSystem pSys = nP.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule ma = pSys.main;
+            ma.startColor = color[2];
+
+            nP.transform.position = this.transform.position;
+
         }
 
         if (m_rightstick.x > 0.2f)
@@ -181,12 +195,26 @@ public class CharacterController : MonoBehaviour
             gameObject.layer = 9;
             surfaceRenderer.material.color = color[3];
             jointRenderer.material.color = color[3];
+            GameObject nP = Instantiate(particles, transform.position, Quaternion.identity) as GameObject;
+            ParticleSystem pSys = nP.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule ma = pSys.main;
+            ma.startColor = color[3];
+
+            nP.transform.position = this.transform.position;
+
         }
         else if (m_rightstick.x < -0.2f)
         {
             gameObject.layer = 12;
             surfaceRenderer.material.color = color[4];
             jointRenderer.material.color = color[4];
+            GameObject nP = Instantiate(particles, transform.position, Quaternion.identity) as GameObject;
+            ParticleSystem pSys = nP.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule ma = pSys.main;
+            ma.startColor = color[4];
+
+            nP.transform.position = this.transform.position;
+
         }
         if (m_rightstick == new Vector2(0, 0))
         {
